@@ -16,7 +16,7 @@ namespace E_Commerce.Application.Services.Classes
     public class ProductService(IUnitOfWork unitOfWork , IMapper mapper): IProductService
     {
 
-        public async Task<Result<IReadOnlyList<ProductDto>>> GetAllProductsAsync(ProductQueryParams queryParams, CancellationToken ct = default)
+        public async Task<Result<PaginationResult<ProductDto>>> GetAllProductsAsync(ProductQueryParams queryParams, CancellationToken ct = default)
         {
             var spec = new ProductWithBrandAndTypeSpecifications(queryParams);
 
@@ -26,8 +26,13 @@ namespace E_Commerce.Application.Services.Classes
 
             var data = mapper.Map<IReadOnlyList<ProductDto>>(products);
 
-            return Result<IReadOnlyList<ProductDto>>.Ok(data);
+            var countSpec = new ProductCountSpecification(queryParams);
 
+            var countOfAllProducts = await unitOfWork.GetRepository<Product, int>().CountAsync(countSpec);
+
+            var result = new PaginationResult<ProductDto>(queryParams.PageIndex, queryParams.PageSize, countOfAllProducts, data);
+
+            return Result<PaginationResult<ProductDto>>.Ok(result);
         }
 
         public async Task<Result<ProductDto>> GetProductByIdAsync(int id, CancellationToken ct)

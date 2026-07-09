@@ -20,10 +20,25 @@ namespace E_Commerce.Application.Specifications
                 query = query.Where(specifications.Criteria);
             }
 
+            if (specifications.Orderby != null)
+            {
+                query = query.OrderBy(specifications.Orderby);
+            }
+            else if (specifications.OrderbyDescending != null)
+            {
+                query = query.OrderByDescending(specifications.OrderbyDescending);
+            }
+
             if (specifications.IncludeExpressions.Any())
             {
                query = specifications.IncludeExpressions.Aggregate(query, (current, nextIncludeExpression) => current.Include(nextIncludeExpression));
             }
+
+            if(specifications.IsPagingEnabled)
+            {
+                query = query.Skip(specifications.Skip).Take(specifications.Take);
+            }
+
             return query;
         }
     }

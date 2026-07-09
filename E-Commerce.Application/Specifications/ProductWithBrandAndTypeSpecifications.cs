@@ -1,4 +1,5 @@
 ﻿using E_Commerce.API.Specifications;
+using E_Commerce.Application.Common;
 using E_Commerce.Domain.Entities.Products;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,31 @@ namespace E_Commerce.Application.Specifications
         {
             AddInclude(p => p.ProductBrand);
             AddInclude(p => p.ProductType);
+
+            switch(queryParams.Sort)
+            {
+                case ProductSortingOptions.NameAsc:
+                    AddOrderBy(p => p.Name);
+                    break;
+
+                case ProductSortingOptions.NameDesc:
+                    AddOrderByDesc(p => p.Name);
+                    break;
+
+                case ProductSortingOptions.PriceAsc:
+                    AddOrderBy(p => p.Price);
+                    break;
+
+                case ProductSortingOptions.PriceDesc:
+                    AddOrderByDesc(p => p.Price);
+                    break;
+
+                default:
+                    AddOrderBy(p => p.Id);
+                    break;
+            }
+
+            ApplyPaging(queryParams.PageSize , queryParams.PageIndex);
         }
 
         public ProductWithBrandAndTypeSpecifications(int id) : base(x => x.Id == id)

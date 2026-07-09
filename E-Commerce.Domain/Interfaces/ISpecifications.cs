@@ -13,5 +13,16 @@ namespace E_Commerce.Domain.Interfaces
         ICollection<Expression<Func<TEntity,object>>> IncludeExpressions { get; }
 
         Expression<Func<TEntity, bool>>? Criteria { get; }
-    }
+
+        Expression<Func<TEntity , object>>  Orderby { get; }
+
+        Expression<Func<TEntity, object>> OrderbyDescending { get; }
+
+        int Take { get; }
+        int Skip { get; }
+        bool IsPagingEnabled { get; }
+
+
+        }
+
 }

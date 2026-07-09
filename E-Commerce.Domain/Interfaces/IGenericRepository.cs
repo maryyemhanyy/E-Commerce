@@ -13,7 +13,7 @@ namespace E_Commerce.Domain.Interfaces
         Task<IReadOnlyList<TEntity>> GetAllAsync(ISpecifications<TEntity,Tkey> specifications,CancellationToken ct = default);
         Task<TEntity?> GetByIdAsync(Tkey id , CancellationToken ct = default);
         Task<TEntity?> GetByIdAsync(ISpecifications<TEntity, Tkey> specifications, CancellationToken ct = default);
-
+        Task<int> CountAsync(ISpecifications<TEntity, Tkey> specifications, CancellationToken ct = default);
         void Add(TEntity entity);
         void Update(TEntity entity);
         void Delete(TEntity entity);
