@@ -1,4 +1,5 @@
-﻿using E_Commerce.Application;
+﻿using E_Commerce.API.Attributes;
+using E_Commerce.Application;
 using E_Commerce.Application.Common;
 using E_Commerce.Application.DTOs.Products;
 using E_Commerce.Application.Services.Interfaces;
@@ -12,6 +13,7 @@ namespace E_Commerce.API.Controllers
     public class ProductController(IProductService productService) :APIBaseController
     {
         #region Get All Products
+        [RedisCache(100)]
         [HttpGet]
         [ProducesResponseType(typeof(ProductDto) , StatusCodes.Status200OK)]
         public async Task<ActionResult<PaginationResult<ProductDto>>>GetAllProducts([FromQuery]ProductQueryParams queryParams , CancellationToken ct)

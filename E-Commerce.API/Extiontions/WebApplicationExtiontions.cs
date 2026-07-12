@@ -9,8 +9,11 @@ namespace E_Commerce.API.Extiontions
             using var scope = webApplication.Services.CreateScope();
 
             var seeder = scope.ServiceProvider.GetKeyedService<IDataSeeder>("Catalog");
+            var Identityseeder = scope.ServiceProvider.GetKeyedService<IDataSeeder>("Identity");
+
 
             await seeder.DataSeedAsync();
+            await Identityseeder.DataSeedAsync();
 
             return webApplication;
         }
